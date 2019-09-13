@@ -36,11 +36,18 @@ public class ImageOfTheDayController {
     @RequestMapping(value = "/store", method = RequestMethod.POST)
     public ResponseEntity<String> storeImage(@RequestBody ImageOfTheDayModel image) {
         ImageOfTheDayEntity temp = iotd.toEntity(image);
-        System.out.println(temp.toString());
-        imageOfTheDayRepository.save(temp);
 
+        try {
+            ImageOfTheDayEntity check = imageOfTheDayRepository.findByTitle(temp.title);
+            if (check.title.equals(temp.getTitle())) {
+                return new ResponseEntity<>("Conflict. Image already inserted!", HttpStatus.CONFLICT);
+            }
+        } catch ( NullPointerException npe ) {
+            imageOfTheDayRepository.save(temp);
+            return new ResponseEntity<>("Image stored.", HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>("Yay", HttpStatus.OK);
+        return new ResponseEntity<>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

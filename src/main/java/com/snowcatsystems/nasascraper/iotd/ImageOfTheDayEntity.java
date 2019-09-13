@@ -40,7 +40,6 @@ public class ImageOfTheDayEntity {
         iotd.setUrl(image.url);
         iotd.setTitle(image.title);
         iotd.setMedia_type(image.media_type);
-        System.out.println(iotd.toString());
         return iotd;
     }
 }
