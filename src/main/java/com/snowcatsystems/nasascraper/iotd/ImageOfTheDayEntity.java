@@ -7,6 +7,7 @@ import java.sql.Date;
 
 @Data
 @Entity
+@Table(name = "imageoftheday")
 public class ImageOfTheDayEntity {
 
 
