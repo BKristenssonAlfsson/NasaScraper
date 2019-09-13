@@ -61,12 +61,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hawkular.commons/hawkular-cors-jaxrs-filter -->
-		<dependency>
-			<groupId>org.hawkular.commons</groupId>
-			<artifactId>hawkular-cors-jaxrs-filter</artifactId>
-			<version>0.9.8.Final</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-rs-security-cors -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-security-cors</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+
 
 	</dependencies>
 
