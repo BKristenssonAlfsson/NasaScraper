@@ -15,7 +15,6 @@ import java.sql.Date;
 @Table(name = "imageoftheday")
 public class ImageOfTheDayEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -41,5 +40,10 @@ public class ImageOfTheDayEntity {
         iotd.setTitle(image.title);
         iotd.setMedia_type(image.media_type);
         return iotd;
+    }
+
+    //Test constructor
+    public ImageOfTheDayEntity(String title) {
+        this.title = title;
     }
 }
