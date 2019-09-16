@@ -27,6 +27,7 @@ public class ImageOfTheDayModel {
     public ImageOfTheDayModel toModel(ImageOfTheDayEntity image) {
 
         ImageOfTheDayModel iotdm = new ImageOfTheDayModel();
+        iotdm.id = image.id;
         iotdm.hdurl = image.hdurl;
         iotdm.explanation = image.explanation;
         iotdm.date = image.date;
@@ -36,12 +37,13 @@ public class ImageOfTheDayModel {
         return iotdm;
     }
 
-    public List<ImageOfTheDayModel> generateModel(List<ImageOfTheDayEntity> d) {
+    public List<ImageOfTheDayModel> generateModel(List<ImageOfTheDayEntity> image) {
 
         List<ImageOfTheDayModel> models = new ArrayList<>();
 
-        for ( ImageOfTheDayEntity e : d) {
+        for ( ImageOfTheDayEntity e : image) {
             ImageOfTheDayModel iotdm = new ImageOfTheDayModel();
+            iotdm.id = e.id;
             iotdm.hdurl = e.hdurl;
             iotdm.explanation = e.explanation;
             iotdm.date = e.date;

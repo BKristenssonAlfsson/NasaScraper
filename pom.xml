@@ -61,14 +61,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-rs-security-cors -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-rs-security-cors</artifactId>
-            <version>3.3.3</version>
-        </dependency>
-
-
 	</dependencies>
 
 	<build>
