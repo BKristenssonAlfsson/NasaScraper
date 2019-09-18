@@ -36,6 +36,7 @@ public class ImageOfTheDayController {
         ImageOfTheDayEntity temp = iotd.toEntity(image);
 
         try {
+
             ImageOfTheDayEntity check = imageOfTheDayRepository.findByTitle(temp.title);
             if (check.title.equals(temp.getTitle())) {
                 return new ResponseEntity<>("Conflict. Image already inserted!", HttpStatus.CONFLICT);
