@@ -20,7 +20,9 @@ public class OnMessageListener {
     public void receivedMessage(@Payload Message msg) {
 
         //System.out.println("Header:::::::: " + header);
-        System.out.println(msg);
+
+        System.out.println(msg.getMessageProperties());
+
         byte[] body = msg.getBody();
         JsonArray json = jsonFromString(new String(body));
         System.out.println(json.getJsonObject(1));
