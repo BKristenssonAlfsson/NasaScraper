@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin
 public class UserController {
 
     private UserRepository userRepository;
@@ -14,7 +13,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("temp")
     public String test() {
         return "Works";
     }

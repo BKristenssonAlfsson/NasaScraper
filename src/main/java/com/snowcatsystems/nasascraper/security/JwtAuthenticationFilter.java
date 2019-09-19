@@ -8,14 +8,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.ArrayList;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
@@ -31,19 +32,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         UserModel credentials = null;
+
         try {
             credentials = new ObjectMapper().readValue(request.getInputStream(), UserModel.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Create login token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 credentials.getUsername(),
                 credentials.getPassword(),
                 new ArrayList<>());
 
-        // Authenticate user
         Authentication auth = authenticationManager.authenticate(authenticationToken);
 
         return auth;
@@ -51,16 +51,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        // Grab principal
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 
-        // Create JWT Token
+        Instant expirestAt = expirationTime();
+
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .withExpiresAt(Date.from(expirestAt))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 
-        // Add token in response
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+    }
+
+    private Instant expirationTime() {
+        Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        Instant expiresAt = issuedAt.plus(3, ChronoUnit.HOURS);
+
+        return expiresAt;
     }
 }
