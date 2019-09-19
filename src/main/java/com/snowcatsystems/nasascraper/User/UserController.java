@@ -13,7 +13,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("temp")
     public String test() {
         return "Works";
     }
