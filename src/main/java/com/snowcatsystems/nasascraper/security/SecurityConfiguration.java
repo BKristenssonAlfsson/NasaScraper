@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository))
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/login/adduser").permitAll()
                 .antMatchers("/iotd").hasRole("USER")
                 .anyRequest().authenticated();
     }
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(11);
     }
 
 }

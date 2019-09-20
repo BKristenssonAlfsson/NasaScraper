@@ -1,62 +1,37 @@
 package com.snowcatsystems.nasascraper.User;
 
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@ToString
+@Setter
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    private long id;
     @Column(nullable = false)
     private String username;
-
     @Column(nullable = false)
     private String password;
-
-    private int active;
-
-    private String roles = "";
-
+    private String roles = "USER";
     private String permissions = "";
-
-    public User(String username, String password, String roles, String permissions){
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-        this.permissions = permissions;
-        this.active = 1;
-    }
-
-    protected User(){}
-
-    public long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public String getPermissions() {
-        return permissions;
-    }
+    private Integer active = 1;
 
     public List<String> getRoleList(){
         if(this.roles.length() > 0){
@@ -70,5 +45,12 @@ public class User {
             return Arrays.asList(this.permissions.split(","));
         }
         return new ArrayList<>();
+    }
+
+    public User toEntity(UserModel newUser) {
+        User user = new User();
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        System.out.println(user.toString());
+        return null;
     }
 }

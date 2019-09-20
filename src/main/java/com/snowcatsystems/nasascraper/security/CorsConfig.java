@@ -19,7 +19,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 logger.info("Adding CORS Mappings");
                 registry.addMapping("/**")
-                        .allowedMethods("GET", "POST")
+                        .allowedMethods("GET", "POST", "OPTIONS")
                         .allowedHeaders("*")
                         .allowedOrigins("*");
             }

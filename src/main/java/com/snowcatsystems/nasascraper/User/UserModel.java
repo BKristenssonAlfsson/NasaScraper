@@ -1,12 +1,17 @@
 package com.snowcatsystems.nasascraper.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@Setter
+@NoArgsConstructor
+@ToString
+@AllArgsConstructor
 public class UserModel {
 
     private String username;
     private String password;
+
 }
