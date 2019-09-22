@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    private User user;
+    private UserService userService = new UserService();
 
     @PostMapping("/adduser")
     public ResponseEntity addUser(@RequestBody UserModel newUser) {
-        User temp = user.toEntity(newUser);
-        System.out.println(temp.toString());
+        userService.registerNewUserAccount(newUser);
         //System.out.println(temp.toString());
         //userRepository.save(temp);
         return ResponseEntity.ok(HttpStatus.OK);

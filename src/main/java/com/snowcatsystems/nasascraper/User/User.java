@@ -18,9 +18,6 @@ import java.util.List;
 @Setter
 public class User {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -45,12 +42,5 @@ public class User {
             return Arrays.asList(this.permissions.split(","));
         }
         return new ArrayList<>();
-    }
-
-    public User toEntity(UserModel newUser) {
-        User user = new User();
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        System.out.println(user.toString());
-        return null;
     }
 }
