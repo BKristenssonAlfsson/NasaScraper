@@ -13,7 +13,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerNewUserAccount(final UserModel accountDto) {
+    public Boolean registerNewUserAccount(final UserModel accountDto) {
 
         final User user = new User();
 
@@ -22,6 +22,13 @@ public class UserService {
         user.setActive(user.getActive());
         user.setRoles(user.getRoles());
 
-        return userRepository.save(user);
+        User exist = userRepository.findByUsername(user.getUsername());
+
+        if ( exist == null ) {
+            userRepository.save(user);
+            return false;
+        } else {
+            return true;
+        }
     }
 }
