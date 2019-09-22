@@ -14,7 +14,8 @@ public class UserController {
 
     @PostMapping("/adduser")
     public ResponseEntity addUser(@RequestBody UserModel newUser) {
-        userService.registerNewUserAccount(newUser);
+        User user = userService.registerNewUserAccount(newUser);
+        System.out.println(user);
         //System.out.println(temp.toString());
         //userRepository.save(temp);
         return ResponseEntity.ok(HttpStatus.OK);

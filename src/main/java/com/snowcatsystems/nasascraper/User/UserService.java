@@ -13,17 +13,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String registerNewUserAccount(final UserModel accountDto) {
+    public User registerNewUserAccount(final UserModel accountDto) {
 
         final User user = new User();
 
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setUsername(accountDto.getUsername());
         user.setActive(user.getActive());
-        user.setId(user.getId());
         user.setRoles(user.getRoles());
 
         return userRepository.save(user);
-        return "OK";
     }
 }
