@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
+        response.setHeader("Access-Control-Expose-Headers", "Authorization");
         UserModel credentials = null;
 
         try {
@@ -45,7 +45,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 new ArrayList<>());
 
         Authentication auth = authenticationManager.authenticate(authenticationToken);
-
         return auth;
     }
 
