@@ -13,12 +13,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Boolean registerNewUserAccount(final UserModel accountDto) {
+    public Boolean registerNewUserAccount(final UserModel userModel) {
 
         final User user = new User();
 
-        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        user.setUsername(accountDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userModel.getPassword()));
+        user.setUsername(userModel.getUsername());
         user.setActive(user.getActive());
         user.setRoles(user.getRoles());
 
