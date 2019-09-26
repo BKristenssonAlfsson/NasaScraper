@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
-        System.out.println("In attemptAuthentication");
 
         UserModel credentials = null;
 
@@ -40,7 +39,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(credentials.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 credentials.getUsername(),
                 credentials.getPassword(),
@@ -53,9 +51,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
-
-        System.out.println("In successfulAuthentication");
-        System.out.println(authResult.toString());
 
         Instant expirestAt = expirationTime();
 
