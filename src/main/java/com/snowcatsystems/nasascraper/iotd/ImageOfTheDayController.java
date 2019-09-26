@@ -16,12 +16,14 @@ public class ImageOfTheDayController {
     private ImageOfTheDayEntity iotd = new ImageOfTheDayEntity();
 
     @Autowired
-    private ImageOfTheDayRepository imageOfTheDayRepository;
+    private ImageOfTheDayService imageOfTheDayService;
+
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<ImageOfTheDayModel>> getAllImages() {
         try {
-            List<ImageOfTheDayEntity> images = imageOfTheDayRepository.findAll();
+            List<ImageOfTheDayEntity> images = imageOfTheDayService.findAll();
 
             List<ImageOfTheDayModel> model = this.iotdm.generateModel(images);
 
@@ -37,12 +39,12 @@ public class ImageOfTheDayController {
 
         try {
 
-            ImageOfTheDayEntity check = imageOfTheDayRepository.findByTitle(temp.title);
+            ImageOfTheDayEntity check = imageOfTheDayService.findByTitle(temp.title);
             if (check.title.equals(temp.getTitle())) {
                 return new ResponseEntity<>("Conflict. Image already inserted!", HttpStatus.CONFLICT);
             }
         } catch ( NullPointerException npe ) {
-            imageOfTheDayRepository.save(temp);
+            imageOfTheDayService.save(temp);
             return new ResponseEntity<>("Image stored.", HttpStatus.OK);
         }
 
