@@ -21,4 +21,10 @@ public class UserController {
             return ResponseEntity.ok(HttpStatus.OK);
         }
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestBody UserModel userModel) {
+        userService.deleteUser();
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }

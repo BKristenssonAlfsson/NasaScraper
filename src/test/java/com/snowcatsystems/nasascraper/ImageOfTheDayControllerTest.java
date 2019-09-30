@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayEntity;
 import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayModel;
 import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayService;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -35,8 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest()
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ImageOfTheDayControllerTest {
+
+    private MockMvc mockUser;
+    private String token = null;
+    private ObjectMapper mapper = new ObjectMapper();
 
     @TestConfiguration
     public static class Config {
@@ -68,11 +68,6 @@ public class ImageOfTheDayControllerTest {
         }
     }
 
-
-    private MockMvc mockUser;
-    private String token = null;
-    private ObjectMapper mapper = new ObjectMapper();
-
     @Autowired
     private WebApplicationContext context;
 
@@ -81,7 +76,6 @@ public class ImageOfTheDayControllerTest {
 
     @Before
     public void setup() throws Exception {
-
         mockUser = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -100,10 +94,24 @@ public class ImageOfTheDayControllerTest {
         this.token = result.getResponse().getHeader("Authorization");
     }
 
+
+    @After
+    public void clean() throws Exception {
+        HttpHeaders httpHeaders = getHttpHeaders();
+
+        mockUser.perform(delete("/login/delete")
+                .headers(httpHeaders)
+                .content("{ \"username\": \"test\" }")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
+    }
+
     @Test
-    public void T1GetAllImages() throws Exception {
+    public void t1GetAllImages() throws Exception {
 
         HttpHeaders httpHeaders = getHttpHeaders();
+
+        System.out.println(httpHeaders);
 
         MvcResult success = mockUser.perform(get("/iotd/").secure(true)
                 .headers(httpHeaders))
@@ -117,8 +125,10 @@ public class ImageOfTheDayControllerTest {
     }
 
     @Test
-    public void T2TestStoreImage() throws Exception {
+    public void t2TestStoreImage() throws Exception {
         HttpHeaders httpHeaders = getHttpHeaders();
+
+        System.out.println(httpHeaders);
 
         ImageOfTheDayModel iotdm = new ImageOfTheDayModel();
         iotdm.setCopyright("test");
