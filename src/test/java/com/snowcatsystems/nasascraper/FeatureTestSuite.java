@@ -6,12 +6,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @ActiveProfiles("test")
-@TestPropertySource(locations="classpath:test.properties")
+@TestPropertySource(locations="classpath:application-test.properties")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        //Run locally due to no container service in Azure
-        /*UserTest.class,
-        ImageOfTheDayControllerTest.class,*/
+        UserTest.class,
+        ImageOfTheDayControllerTest.class,
         NasascraperApplicationTests.class
 })
 
