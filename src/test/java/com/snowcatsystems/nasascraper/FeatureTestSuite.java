@@ -9,8 +9,9 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(locations="classpath:test.properties")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserTest.class,
-        ImageOfTheDayControllerTest.class,
+        //Run locally due to no container service in Azure
+        /*UserTest.class,
+        ImageOfTheDayControllerTest.class,*/
         NasascraperApplicationTests.class
 })
 
