@@ -24,20 +24,25 @@ public class UserTest {
     @Autowired
     private WebApplicationContext context;
 
-    private MockMvc mockMvc;
+    private MockMvc mockUser;
 
     @Before
-    public void setup() {
-        mockMvc = MockMvcBuilders
+    public void setup() throws Exception {
+        mockUser = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        mockUser.perform(post("/login/adduser")
+                .content("{ \"username\": \"test\", \"password\": \"test\" }")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
     @Order(1)
     public void testLogin() throws Exception {
-        MvcResult result = mockMvc.perform(post("/login")
+        MvcResult result = mockUser.perform(post("/login")
                 .content("{ \"username\": \"test\", \"password\": \"test\" }")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

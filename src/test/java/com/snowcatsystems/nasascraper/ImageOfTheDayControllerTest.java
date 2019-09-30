@@ -111,8 +111,6 @@ public class ImageOfTheDayControllerTest {
 
         HttpHeaders httpHeaders = getHttpHeaders();
 
-        System.out.println(httpHeaders);
-
         MvcResult success = mockUser.perform(get("/iotd/").secure(true)
                 .headers(httpHeaders))
                 .andReturn();
@@ -127,8 +125,6 @@ public class ImageOfTheDayControllerTest {
     @Test
     public void t2TestStoreImage() throws Exception {
         HttpHeaders httpHeaders = getHttpHeaders();
-
-        System.out.println(httpHeaders);
 
         ImageOfTheDayModel iotdm = new ImageOfTheDayModel();
         iotdm.setCopyright("test");
