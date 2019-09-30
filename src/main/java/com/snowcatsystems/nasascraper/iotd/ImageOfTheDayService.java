@@ -13,18 +13,14 @@ public class ImageOfTheDayService {
 
 
     public List<ImageOfTheDayEntity> findAll() {
-        imageOfTheDayRepository.findAll();
-        return null;
+        return imageOfTheDayRepository.findAll();
     }
 
     public ImageOfTheDayEntity save(ImageOfTheDayEntity temp) {
-        imageOfTheDayRepository.save(temp);
-        return null;
+        return imageOfTheDayRepository.save(temp);
     }
 
     public ImageOfTheDayEntity findByTitle(String title) {
-        imageOfTheDayRepository.findByTitle(title);
-
-        return null;
+        return imageOfTheDayRepository.findByTitle(title);
     }
 }

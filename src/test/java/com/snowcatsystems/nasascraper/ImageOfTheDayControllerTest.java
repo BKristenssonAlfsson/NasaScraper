@@ -5,20 +5,31 @@ import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayEntity;
 import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayModel;
 import com.snowcatsystems.nasascraper.iotd.ImageOfTheDayService;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testcontainers.containers.MySQLContainer;
+import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,8 +41,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations="classpath:application-test.properties")
+@SpringBootTest()
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ImageOfTheDayControllerTest {
+
+    @TestConfiguration
+    public static class Config {
+        @Bean
+        public MySQLContainer testContainer() {
+            MySQLContainer container = new MySQLContainer();
+            container.start();
+
+            return container;
+        }
+
+        @Bean
+        @Primary
+        public DataSource dataSource(MySQLContainer container) {
+            return DataSourceBuilder.create()
+                    .url(container.getJdbcUrl())
+                    .username(container.getUsername())
+                    .password(container.getPassword())
+                    .driverClassName(container.getDriverClassName())
+                    .build();
+        }
+    }
+
 
     private MockMvc mockUser;
     private String token = null;
@@ -45,10 +81,16 @@ public class ImageOfTheDayControllerTest {
 
     @Before
     public void setup() throws Exception {
+
         mockUser = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        mockUser.perform(post("/login/adduser")
+                .content("{ \"username\": \"test\", \"password\": \"test\" }")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
 
         MvcResult result = mockUser.perform(post("/login")
                 .content("{ \"username\": \"test\", \"password\": \"test\" }")
