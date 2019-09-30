@@ -9,9 +9,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+jobs:
+  - job: TestContainer
+    pool:
+      container:
+        image: mysql:latest
+        name: TestContainer
+
 steps:
-  - task: Docker@2
-    displayName: TestContainer
   - task: Maven@3
     inputs:
       mavenPomFile: 'pom.xml'
